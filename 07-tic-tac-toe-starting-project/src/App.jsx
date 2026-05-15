@@ -1,9 +1,48 @@
+import { useState } from "react"
+
+import Players from "./components/Player"
+import GameBoard from "./components/GameBoard"
+import Log from "./components/Log"
 
 function App() {
-  
+  const [gameTurns, setGameTurns] = useState([]);
+  const [activePlayer, setActivePlayer] = useState("X");
+
+  function handleSelectSquare(rowIndex, colIndex) {
+    setActivePlayer((prevActivePlayer) => prevActivePlayer === "X" ? "O" : "X");
+    setGameTurns((prevGameTurns) => {
+      let currentPlayer = "X"
+
+      if (prevGameTurns.length > 0 && prevGameTurns[0].player === "X") {
+        currentPlayer = "O";
+      }
+
+      const updatedTurns = [
+        {
+          square: { row: rowIndex, col: colIndex },
+          player: currentPlayer
+        },
+        ...prevGameTurns,
+      ];
+
+      return updatedTurns;
+    });
+  }
 
   return (
-    <h1>React Tic-Tac-Toe</h1>
+     <main>
+      <div id="game-container">
+        <ol id="players" className="highlight-player">
+            <Players initialName="Player 1" symbol="X" isActive={activePlayer === "X"} />
+            <Players initialName="Player 2" symbol="O" isActive={activePlayer === "O"} />
+        </ol>
+        <GameBoard 
+          onSelectSquare={handleSelectSquare}
+          turns={gameTurns} 
+        />
+      </div>
+      <Log turns={gameTurns}/>
+     </main>
   )
 }
 
