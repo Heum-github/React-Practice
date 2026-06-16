@@ -8,6 +8,7 @@ export default function Calculator({ inputValue, handleChange }) {
         });
     }
 
+    
     return (
         <section id="user-input">
         <div className="input-group">
