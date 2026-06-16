@@ -1,10 +1,13 @@
-import { calculateInvestmentResults } from '../util/investment';
+import { calculateInvestmentResults, formatter } from '../util/investment';
 
 export default function Chart( { inputValue } ) {
 
     console.log(inputValue);
 
-    const annualData = calculateInvestmentResults(inputValue);
+    const resultData = calculateInvestmentResults(inputValue);
+
+    const initialInvestment =
+      resultData[0].valueEndOfYear - resultData[0].interest - resultData[0].annualInvestment; 
 
     return (
         <table id = "result">
@@ -18,15 +21,19 @@ export default function Chart( { inputValue } ) {
                 </tr>
             </thead>
             <tbody>
-                {annualData.map((data) => (
-                    <tr key={data.year}>
-                        <td>{data.year}</td>
-                        <td>{data.interest}</td>
-                        <td>{data.valueEndOfYear}</td>
-                        <td>{data.annualInvestment}</td>
-                        <td>{data.valueEndOfYear}</td>
-                    </tr>
-                ))}
+                {resultData.map((data) => {
+                    const totalInvestment = data.valueEndOfYear - data.annualInvestment * data.year - initialInvestment;
+                    const totalAmontInvestment = data.valueEndOfYear - totalInvestment;
+                    return (
+                        <tr key={data.year}>
+                            <td>{data.year}</td>
+                            <td>{formatter.format(data.valueEndOfYear)}</td>
+                            <td>{formatter.format(data.interest)}</td>
+                            <td>{formatter.format(totalInvestment)}</td>
+                            <td>{formatter.format(totalAmontInvestment)}</td>
+                        </tr>
+                    );
+                })}
             </tbody>
         </table>
     )

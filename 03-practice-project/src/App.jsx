@@ -5,11 +5,13 @@ import { useState } from 'react';
 
 function App() {
   const [inputValue, setInputValue] = useState({
-    'initialInvestment' : '',
-    'annualInvestment' : '',
-    'expectedReturn' : '',
-    'duration' : ''
+    'initialInvestment' : 10000,
+    'annualInvestment' : 1200,
+    'expectedReturn' : 6,
+    'duration' : 10
   })
+
+  const inputIsValid = inputValue.duration >= 0;
 
   function handleChange(inputValues) {
     setInputValue(inputValues);
@@ -20,7 +22,8 @@ function App() {
       <Header />
       <main>
         <Calculator inputValue={inputValue} handleChange={handleChange} />
-        <Chart inputValue={inputValue} />
+        {!inputIsValid && <p id="user-input">Please enter valid input values.</p>}
+        {inputIsValid && <Chart inputValue={inputValue} />}
       </main>
     </>
   )
